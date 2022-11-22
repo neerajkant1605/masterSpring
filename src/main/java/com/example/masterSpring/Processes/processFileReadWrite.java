@@ -1,15 +1,19 @@
-package com.example.masterSpring.Service;
-import org.springframework.stereotype.Service;
+package com.example.masterSpring.Processes;
 
-import java.io.*;
+import com.example.masterSpring.Service.serviceReadTextFile;
+import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 
-@Service
-public class serviceReadTextFile {
+@Component
+public class processFileReadWrite {
+
     public static void reader(String ip, String op) throws IOException {
         String line = null;
         String delimiter = ",";
@@ -20,11 +24,10 @@ public class serviceReadTextFile {
             String[] values = line.split(delimiter);
             String content = values[0] + "," + values[1];
             Files.writeString(Path.of(op), content + System.lineSeparator(), APPEND);
+            System.out.println("Hello Ji");
         }
 
     }
+
+
 }
-
-
-
-
