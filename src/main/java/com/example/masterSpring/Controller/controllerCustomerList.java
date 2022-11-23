@@ -17,7 +17,7 @@ public class controllerCustomerList {
 
 
     /*************************************************************
-     * Home page
+     * Get Customer list
      *************************************************************/
 
     @RequestMapping("/customers")

@@ -6,15 +6,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 public class controllerHomePage {
-    private final serviceMessage message;
 
-    public controllerHomePage(serviceMessage message) {
-        this.message = message;
+    private final serviceMessage sm;
+
+    public controllerHomePage(serviceMessage sm) {
+        this.sm = sm;
+
     }
 
     /*************************************************************
      * Home page
      *************************************************************/
+
+    @RequestMapping("/home")
+    public String home() {
+        return sm.message("This is home page");
+    }
 
 
 

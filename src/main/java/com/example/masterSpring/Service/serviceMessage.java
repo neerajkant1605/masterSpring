@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class serviceMessage {
 
-    @Bean
-    public String message () {
-        String s = "This is a test";
-        System.out.println(s);
-        return s;
+
+    public String message (String s) {
+      return s;
     }
 }
 
