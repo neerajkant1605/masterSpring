@@ -1,8 +1,5 @@
 package com.example.masterSpring;
 
-import com.example.masterSpring.Processes.masterSpringApplicationint;
-import com.example.masterSpring.Processes.processFileReadWrite;
-import com.example.masterSpring.Processes.processPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
