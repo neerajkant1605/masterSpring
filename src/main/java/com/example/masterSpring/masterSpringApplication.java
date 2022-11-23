@@ -11,9 +11,16 @@ public class masterSpringApplication implements CommandLineRunner {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(masterSpringApplication.class, args);
 	}
-	
+
+	/*
+
+	To call a class method we need instantiate the class here with auto wire below
+
 	@Autowired
-	private processFileReadWrite printing;
+	private className instanceName;
+
+	 */
+
 
 	@Override
 	public void run(String... args) throws Exception {
