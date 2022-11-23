@@ -20,7 +20,7 @@ public class masterSpringApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		printing.reader("E:\\Files\\Incoming\\Customer.txt","E:\\Files\\Outgoing\\SpringOut.txt");
+		System.out.println("No command line message yet");
 	}
 }
 

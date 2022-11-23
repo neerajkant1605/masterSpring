@@ -1,16 +1,23 @@
-package com.example.masterSpring.Service;
-import org.springframework.stereotype.Service;
+package com.example.masterSpring.fileProcesses;
 
-import java.io.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 
-@Service
-public class serviceReadTextFile {
-    public static void reader(String ip, String op) throws IOException {
+@Component
+public class readWriteFilesText {
+
+    @Bean
+    public static void readerWrite() throws IOException {
+        String ip = "E:\\Files\\Incoming\\Customer.txt";
+        String op = "E:\\Files\\Outgoing\\SpringOut.txt";
         String line = null;
         String delimiter = ",";
         BufferedReader br = new BufferedReader(new FileReader(ip));
@@ -24,7 +31,3 @@ public class serviceReadTextFile {
 
     }
 }
-
-
-
-

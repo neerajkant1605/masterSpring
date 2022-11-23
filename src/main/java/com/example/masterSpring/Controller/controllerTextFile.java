@@ -1,9 +1,6 @@
 package com.example.masterSpring.Controller;
-import com.example.masterSpring.Service.serviceReadTextFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 @RestController
 public class controllerTextFile {

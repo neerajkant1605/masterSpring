@@ -16,10 +16,6 @@ public class controllerHomePage {
      * Home page
      *************************************************************/
 
-    @RequestMapping("/home")
-    public String messageOutput() {
-        return message.message("This is home page");
-    }
 
 
 }
