@@ -1,5 +1,7 @@
-package com.example.masterSpring.fileProcesses;
+package com.example.masterSpring.FileProcesses;
 
+import com.example.masterSpring.GenericMethods.genMethods;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +16,17 @@ import static java.nio.file.StandardOpenOption.APPEND;
 @Component
 public class readWriteFilesText {
 
+
+    @Autowired
+    private genMethods gm;
+    public readWriteFilesText(genMethods gm) {
+        this.gm = gm;
+    }
+
+
     @Bean
-    public static void readerWrite() throws IOException {
-        String ip = "E:\\Files\\Incoming\\Customer.txt";
+    public void readerWrite() throws IOException {
+        String ip = gm.getLastModified("E:\\Files\\Incoming\\CustomerSpringFolder").toString();
         String op = "E:\\Files\\Outgoing\\SpringOut.txt";
         String line = null;
         String delimiter = ",";

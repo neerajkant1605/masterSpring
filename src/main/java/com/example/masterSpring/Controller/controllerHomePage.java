@@ -1,5 +1,6 @@
 package com.example.masterSpring.Controller;
-import com.example.masterSpring.Service.serviceMessage;
+import com.example.masterSpring.GenericMethods.genMethods;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,11 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class controllerHomePage {
 
-    private final serviceMessage sm;
-
-    public controllerHomePage(serviceMessage sm) {
-        this.sm = sm;
-
+    @Autowired
+    private genMethods gm;
+    public controllerHomePage(genMethods gm) {
+        this.gm = gm;
     }
 
     /*************************************************************
@@ -20,7 +20,7 @@ public class controllerHomePage {
 
     @RequestMapping("/home")
     public String home() {
-        return sm.message("This is home page");
+        return gm.message("This is home page");
     }
 
 
