@@ -18,7 +18,7 @@ public class readWriteFilesText {
 
 
     @Autowired
-    private genMethods gm;
+    genMethods gm;
     public readWriteFilesText(genMethods gm) {
         this.gm = gm;
     }

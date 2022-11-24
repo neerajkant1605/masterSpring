@@ -1,0 +1,20 @@
+localstack:
+  enabled: true
+  region: eu-west-2
+  endpoint: http://localhost:4566
+  credentials:
+      access-key: test
+      secret-key: test
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAW62INZ6ZL3FV2VX4
+      secret-key: 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
+    region:
+      static: eu-west-2
+    stack:
+      auto: false
+
+server:
+  port: 8080

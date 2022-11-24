@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class controllerHomePage {
 
     @Autowired
-    private genMethods gm;
+    genMethods gm;
     public controllerHomePage(genMethods gm) {
         this.gm = gm;
     }
