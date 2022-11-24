@@ -9,8 +9,8 @@ localstack:
 cloud:
   aws:
     credentials:
-      access-key: AKIAW62INZ6ZL3FV2VX4
-      secret-key: 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
+      access-key: xxx
+      secret-key: yyy
     region:
       static: eu-west-2
     stack:
