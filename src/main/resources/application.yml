@@ -9,8 +9,8 @@ localstack:
 cloud:
   aws:
     credentials:
-      access-key: xxx
-      secret-key: yyy
+      access-key: x
+      secret-key: y
     region:
       static: eu-west-2
     stack:
@@ -18,3 +18,16 @@ cloud:
 
 server:
   port: 8080
+
+application:
+  bucket:
+    name:
+      input: s3.spring.input
+      output: s3.spring.output
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+

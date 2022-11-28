@@ -1,5 +1,6 @@
 package com.example.masterSpring.Configurations;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -43,27 +44,28 @@ public class configS3 {
     // AWS Client Builder
 
     /*
+
     @Bean
     public AmazonS3 s3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(region).build();
-       */
+     */
 
-        // Localstack ClientBuilder
-        @Bean
-        public AmazonS3 s3Client() {
-            var endpointConfig = new AwsClientBuilder.EndpointConfiguration(localstackEndPoint, localstackRegion);
-                AWSCredentials credentials = new BasicAWSCredentials(localstackAccessKey, localstackAccessSecret);
-                return AmazonS3ClientBuilder.standard()
-                        .withEndpointConfiguration(endpointConfig)
-                        .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
-
-            }
+    // Localstack ClientBuilder
+    @Bean
+    public AmazonS3 s3Client() {
+        var endpointConfig = new AwsClientBuilder.EndpointConfiguration(localstackEndPoint, localstackRegion);
+        AWSCredentials credentials = new BasicAWSCredentials(localstackAccessKey, localstackAccessSecret);
+        return AmazonS3ClientBuilder.standard()
+                .withEndpointConfiguration(endpointConfig)
+                .withPathStyleAccessEnabled(true)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 
     }
+}
 
 
 
