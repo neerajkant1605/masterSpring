@@ -98,11 +98,12 @@ public class serviceS3{
         //Generate unique output file name for upload
         String outputFileName = inputFileName.toString().replace(".txt", "") + "_Out_" ;
         File outputFilePath = File.createTempFile(outputFileName, ".txt");
-        log.info("Output file is: " + outputFilePath.toString());
+        log.info("Output file name and location is: " + outputFilePath.toString());
 
 
         //Upload input file to S3 Bucket
         amzS3.putObject(inputBucketName, keyName, new File(inputFilePath.toString()));
+        log.info("Local file " + keyName + " uploaded to input bucket: " + inputBucketName);
 
         // READ UPLOADED FILE
         //Create file object from file in S3
@@ -110,14 +111,12 @@ public class serviceS3{
         InputStream objectData = object.getObjectContent();
 
 
-
-
         //Read files line by line in an array
+        log.info("Reading file " + object.toString() + " start ........ from bucket: " + inputBucketName );
         String line = null;
         String delimiter = ",";
         String outputFilePathString = new String (outputFilePath.toString());
         try {
-
 
             BufferedReader reader= new BufferedReader( new InputStreamReader(objectData));
             reader.readLine();
@@ -127,19 +126,20 @@ public class serviceS3{
                 String[] values = line.split(delimiter);
                 String content = new String ("Data rows: " + values[0] + "|"+ values[1] + "|" + values[2] + "|" + values[3] + "|" + myDateString);
                 Files.write(Paths.get(outputFilePathString), (content + System.lineSeparator()).getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-
             }
         }
         catch (IOException e){
             log.error("Exception when reading & writing file: " + e);
         }
 
-        //Upload input file to S3 Bucket
-        amzS3.putObject(outputBucketName, outputFileName + myDateString + ".txt", new File(outputFilePathString));
-        outputFilePath.delete();
-        return "File " + keyName + " is uploaded to basket: " +  inputBucketName;
+        log.info("File writing finished .....");
 
-        //Upload input file to S3 Bucket
+        //Upload output file to S3 Bucket
+        amzS3.putObject(outputBucketName, outputFileName + myDateString + ".txt", new File(outputFilePathString));
+        log.info("Output file " + outputFileName + myDateString + ".txt uploaded to bucket: " + outputBucketName  );
+        outputFilePath.delete();
+        log.info("Temp file: " + outputFilePath.toString() + " deleted");
+        return "File " + keyName + " is uploaded to basket: " +  inputBucketName;
 
     }
 
