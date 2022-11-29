@@ -3,6 +3,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3Object;
 import com.example.masterSpring.GenericMethods.genMethods;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,15 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
+import static java.nio.file.StandardOpenOption.APPEND;
 
+@Slf4j
 @Service
 public class serviceS3{
 
@@ -36,6 +42,8 @@ public class serviceS3{
     @Value("${application.bucket.name.input}")
     private String inputBucketName;
 
+    @Value("${application.bucket.name.output}")
+    private String outputBucketName;
 
 
     public List<Bucket> listBuckets () {
@@ -68,8 +76,14 @@ public class serviceS3{
     @Bean
     public String fileProcess () throws IOException {
 
-        //UPLOAD FILE:
 
+
+        //Generate datetime stamp
+        Date myDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String myDateString = sdf.format(myDate);
+
+        //UPLOAD FILE:
         //Get the latest modified file
         String inputFolder = gm.getLastModified("E:\\Files\\Incoming").toString();
 
@@ -77,44 +91,62 @@ public class serviceS3{
         Path inputFilePath = Paths.get(inputFolder);
         Path inputFileName = inputFilePath.getFileName();
 
-        //Generate unique file name for upload
-        String keyName = System.currentTimeMillis()+ "_"+ inputFileName.toString();
+        //Generate unique input file name for upload
+        String keyName = inputFileName.toString().replace(".txt","") + "_" + myDateString + ".txt";
+        log.info("Input file name is: " + keyName);
 
-        //Upload file to S3 Bucket
+        //Generate unique output file name for upload
+        String outputFileName = inputFileName.toString().replace(".txt", "") + "_Out_" ;
+        File outputFilePath = File.createTempFile(outputFileName, ".txt");
+        log.info("Output file is: " + outputFilePath.toString());
+
+
+        //Upload input file to S3 Bucket
         amzS3.putObject(inputBucketName, keyName, new File(inputFilePath.toString()));
 
-
         // READ UPLOADED FILE
-
         //Create file object from file in S3
         S3Object object = amzS3.getObject(inputBucketName, keyName);
         InputStream objectData = object.getObjectContent();
 
+
+
+
         //Read files line by line in an array
         String line = null;
         String delimiter = ",";
+        String outputFilePathString = new String (outputFilePath.toString());
         try {
+
+
             BufferedReader reader= new BufferedReader( new InputStreamReader(objectData));
             reader.readLine();
-
-            //Generate datetime stamp string
-            Date myDate = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss");
-            String myDateString = sdf.format(myDate);
 
             //Read file
             while(((line = reader.readLine()) != null)) {
                 String[] values = line.split(delimiter);
-                System.out.println(values[0] + "|"+ values[1] + "|" + values[2] + "|" + values[3] + "|" + myDateString );
+                String content = new String ("Data rows: " + values[0] + "|"+ values[1] + "|" + values[2] + "|" + values[3] + "|" + myDateString);
+                Files.write(Paths.get(outputFilePathString), (content + System.lineSeparator()).getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+
             }
         }
         catch (IOException e){
-            e.printStackTrace();
+            log.error("Exception when reading & writing file: " + e);
         }
+
+        //Upload input file to S3 Bucket
+        amzS3.putObject(outputBucketName, outputFileName + myDateString + ".txt", new File(outputFilePathString));
+        outputFilePath.delete();
         return "File " + keyName + " is uploaded to basket: " +  inputBucketName;
+
+        //Upload input file to S3 Bucket
+
     }
 
+
 }
+
+
 
 
 

@@ -44,14 +44,16 @@ public class configS3 {
     // AWS Client Builder
 
     /*
-
     @Bean
     public AmazonS3 s3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(region).build();
+
      */
+
+
 
     // Localstack ClientBuilder
     @Bean
@@ -62,8 +64,6 @@ public class configS3 {
                 .withEndpointConfiguration(endpointConfig)
                 .withPathStyleAccessEnabled(true)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
-
-
     }
 }
 
