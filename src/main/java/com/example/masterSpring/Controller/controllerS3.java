@@ -31,12 +31,4 @@ public class controllerS3 {
         return "file uploaded: " + sS3.uploadFileController(file).toString();
     }
 
-    @PostMapping("/content")
-    public String readFile(@RequestParam (value= "keyName") String file) throws IOException {
-        sS3.readFile(file);
-        return sS3.readFile(file);
-
-    }
-
-
 }

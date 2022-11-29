@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 
@@ -38,55 +44,84 @@ public class serviceS3{
     }
 
     /*****************************
-        Upload files to S3
+       API:
      ****************************/
 
-    //Upload via controller API and Postman
+    //Upload files to S3
     public String uploadFileController (MultipartFile multipartFile) throws IOException {
-
         String uniqueFileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
         File file = gm.convertMultipartToFile(multipartFile);
         amzS3.putObject(inputBucketName, uniqueFileName, file);
         return uniqueFileName;
     }
 
-    //Upload from disk storage (Bean is created hence method does not need to be called)
+    /********************************************************
+     Console:
+     > Upload last modified file in folder to S3
+     > Read the uploaded file in an array
+     > Make changes to file and add time stamp
+     > Write the data to a temp file  and save
+     > Upload the new file to S3 Bucket
+     ********************************************************/
+
+
     @Bean
-    public String uploadFileFromDisk () throws IOException {
-        String keyName = System.currentTimeMillis()+ "_"+ "SampleText.txt";
-        String filePath = "E:\\Files\\Incoming\\SampleText.txt";
-        amzS3.putObject(inputBucketName, keyName, new File(filePath));
-        return "file uploaded directory: " + filePath ;
-    }
+    public String fileProcess () throws IOException {
 
-    /*****************************
-     Upload files to S3
-     ****************************/
+        //UPLOAD FILE:
+
+        //Get the latest modified file
+        String inputFolder = gm.getLastModified("E:\\Files\\Incoming").toString();
+
+        //Extract the file name
+        Path inputFilePath = Paths.get(inputFolder);
+        Path inputFileName = inputFilePath.getFileName();
+
+        //Generate unique file name for upload
+        String keyName = System.currentTimeMillis()+ "_"+ inputFileName.toString();
+
+        //Upload file to S3 Bucket
+        amzS3.putObject(inputBucketName, keyName, new File(inputFilePath.toString()));
 
 
-    public String readFile (String keyName) throws IOException {
-       S3Object object = amzS3.getObject(inputBucketName, keyName );
+        // READ UPLOADED FILE
+
+        //Create file object from file in S3
+        S3Object object = amzS3.getObject(inputBucketName, keyName);
         InputStream objectData = object.getObjectContent();
 
-
+        //Read files line by line in an array
+        String line = null;
+        String delimiter = ",";
         try {
             BufferedReader reader= new BufferedReader( new InputStreamReader(objectData));
             reader.readLine();
-            String line = null;
-            while(((line = reader.readLine()) != null)) {
-                return line;
-            }
 
+            //Generate datetime stamp string
+            Date myDate = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss");
+            String myDateString = sdf.format(myDate);
+
+            //Read file
+            while(((line = reader.readLine()) != null)) {
+                String[] values = line.split(delimiter);
+                System.out.println(values[0] + "|"+ values[1] + "|" + values[2] + "|" + values[3] + "|" + myDateString );
+            }
         }
         catch (IOException e){
             e.printStackTrace();
         }
-        return null;
+        return "File " + keyName + " is uploaded to basket: " +  inputBucketName;
     }
 
-
-
-
 }
+
+
+
+
+
+
+
+
 
 
