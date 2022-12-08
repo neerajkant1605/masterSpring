@@ -134,6 +134,7 @@ public class serviceS3{
 
         log.info("File writing finished .....");
 
+
         //Upload output file to S3 Bucket
         amzS3.putObject(outputBucketName, outputFileName + myDateString + ".txt", new File(outputFilePathString));
         log.info("Output file " + outputFileName + myDateString + ".txt uploaded to bucket: " + outputBucketName  );
