@@ -76,6 +76,8 @@ public class serviceS3{
     @Bean
     public String fileProcess () throws IOException {
 
+        log.info("S3 BUCKET PROCESSES START ..................");
+
 
 
         //Generate datetime stamp

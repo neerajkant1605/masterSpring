@@ -31,3 +31,14 @@ spring:
       max-file-size: 1000MB
       max-request-size: 1000MB
 
+folder:
+  input:
+    text: E:\Files\Incoming\CustomerSpringFolder
+    json:
+
+files:
+  input:
+    json: E:\\Files\\Incoming\\Json\\left.json
+  output:
+    text: E:\\Files\\Outgoing\\SpringOut.txt
+

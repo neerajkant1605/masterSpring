@@ -1,7 +1,9 @@
 package com.example.masterSpring.FileProcesses;
 
 import com.example.masterSpring.GenericMethods.genMethods;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +15,15 @@ import java.nio.file.Path;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 
+@Slf4j
 @Component
 public class readWriteFilesText {
+
+    @Value("${files.output.text}")
+    private String textOutputFile;
+
+    @Value("${folder.input.text}")
+    private String textInputFolder;
 
 
     @Autowired
@@ -26,8 +35,11 @@ public class readWriteFilesText {
 
     @Bean
     public void readerWrite() throws IOException {
-        String ip = gm.getLastModified("E:\\Files\\Incoming\\CustomerSpringFolder").toString();
-        String op = "E:\\Files\\Outgoing\\SpringOut.txt";
+
+
+
+        String ip = gm.getLastModified(textInputFolder).toString();
+        String op = textOutputFile;
         String line = null;
         String delimiter = ",";
         BufferedReader br = new BufferedReader(new FileReader(ip));
@@ -37,7 +49,10 @@ public class readWriteFilesText {
             String[] values = line.split(delimiter);
             String content = values[0] + "," + values[1];
             Files.writeString(Path.of(op), content + System.lineSeparator(), APPEND);
+
         }
 
+
     }
+
 }
