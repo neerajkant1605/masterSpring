@@ -49,10 +49,6 @@ public class readWriteFilesJson  {
         joLeft.remove("zipCode");
 
 
-
-
-
-
     }
 
 }
