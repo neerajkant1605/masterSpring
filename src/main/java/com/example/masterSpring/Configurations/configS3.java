@@ -57,6 +57,8 @@ public class configS3 {
 
     // Localstack ClientBuilder
     @Bean
+
+
     public AmazonS3 s3Client() {
         var endpointConfig = new AwsClientBuilder.EndpointConfiguration(localstackEndPoint, localstackRegion);
         AWSCredentials credentials = new BasicAWSCredentials(localstackAccessKey, localstackAccessSecret);

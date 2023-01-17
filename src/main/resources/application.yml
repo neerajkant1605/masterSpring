@@ -1,6 +1,6 @@
 localstack:
   enabled: true
-  region: eu-west-2
+  region: us-east-1
   endpoint: http://localhost:4566
   credentials:
       access-key: test

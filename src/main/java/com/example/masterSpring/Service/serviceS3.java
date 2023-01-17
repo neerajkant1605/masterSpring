@@ -1,5 +1,6 @@
 package com.example.masterSpring.Service;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3Object;
 import com.example.masterSpring.GenericMethods.genMethods;
@@ -45,6 +46,45 @@ public class serviceS3{
     @Value("${application.bucket.name.output}")
     private String outputBucketName;
 
+    @Value("${localstack.region}")
+    private String localstackRegion;
+
+    @Value("${localstack.endpoint}")
+    private String localstackEndPoint;
+
+
+    @Bean
+    public void createInputBuckets(){
+
+        log.info("Create bucket process start");
+        log.info("Local stack region" + localstackRegion);
+
+        if(!amzS3.doesBucketExistV2(inputBucketName))
+        try {
+            amzS3.createBucket(inputBucketName);
+        }
+        catch (AmazonS3Exception e){
+            log.info("Exceptions caused: AmazonS3Exception - " + e);
+        }
+        else { log.info("Bucket " + inputBucketName + " already exists");}
+
+    }
+
+    @Bean
+    public void createOutputBuckets(){
+
+        if(!amzS3.doesBucketExistV2(outputBucketName ))
+            try {
+
+                amzS3.createBucket(outputBucketName);
+            }
+            catch (AmazonS3Exception e){
+                log.info("Exceptions caused: AmazonS3Exception - " + e);
+            }
+        else { log.info("Bucket " + outputBucketName + " already exists");}
+
+    }
+
 
     public List<Bucket> listBuckets () {
             List<Bucket> s = amzS3.listBuckets();
@@ -71,6 +111,8 @@ public class serviceS3{
      > Write the data to a temp file  and save
      > Upload the new file to S3 Bucket
      ********************************************************/
+
+
 
 
     @Bean
